@@ -1,0 +1,39 @@
+{
+  "name": "bit-backend",
+  "version": "1.0.0",
+  "description": "Problema - Variación de precios según el dólar y popularidad de consolas, videojuegos y accesorios",
+  "type": "module",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "seed:home": "node src/scripts/seedHomeData.js",
+    "seed:all": "node src/scripts/seedAllData.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nojhze4/bit-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nojhze4/bit-backend/issues"
+  },
+  "homepage": "https://github.com/Nojhze4/bit-backend#readme",
+  "dependencies": {
+    "@bevry/file-url-to-path": "^1.1.0",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.1",
+    "multer": "^2.0.2",
+    "npm-path": "^2.0.4"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.10"
+  }
+}
