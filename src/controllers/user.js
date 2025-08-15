@@ -1,7 +1,7 @@
 import UserModel from "../models/user.js";
 import bcrypt from "bcryptjs";
 
-const usersController = {
+export const usersController = {
   create: async (req, res) => {
     try {
       console.log("Creating user with data:", req.body);
@@ -28,7 +28,6 @@ const usersController = {
         });
       }
 
-      // Hash password
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -40,7 +39,7 @@ const usersController = {
       
       const userCreated = await newUser.save();
       
-      // Don't send password in response
+
       const { password: _, ...userData } = userCreated.toObject();
       
       console.log("User created successfully:", userData._id);

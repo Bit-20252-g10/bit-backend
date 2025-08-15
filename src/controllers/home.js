@@ -1,62 +1,72 @@
-import CategoryModel from "../models/category.js";
-import FeatureModel from "../models/feature.js";
-import HomeModel from "../models/home.js";
-import GameModel from "../models/games.js";
+import InventoryModel from "../models/inventory.js";
 
 const homeController = {
+
   getHomeData: async (req, res) => {
     try {
-      const categories = await CategoryModel.find({ isActive: true }).sort({ order: 1 });
-      
-      const features = await FeatureModel.find({ isActive: true }).sort({ order: 1 });
-      
-      const homeConfig = await HomeModel.findOne({ isActive: true });
-      
-      const featuredGames = await GameModel.find().sort({ createdAt: -1 }).limit(6);
-      
-      const totalGames = await GameModel.countDocuments();
-      
+
       res.status(200).json({
         allOK: true,
-        message: "Home data retrieved successfully",
+        message: "Datos generales de la página de inicio obtenidos exitosamente.",
         data: {
-          hero: homeConfig || {
-            heroTitle: "Bienvenido a Princegaming",
-            heroSubtitle: "Tu tienda de confianza para consolas, juegos y accesorios gaming",
-            heroButtonText: "Explorar Consolas",
-            heroButtonRoute: "/consolas"
-          },
-          categories,
-          features,
-          featuredGames,
-          stats: {
-            totalGames
-          }
-        }
+          info: "Bienvenido a la API de la página de inicio. Usa otros endpoints para obtener datos específicos.",
+        },
       });
     } catch (error) {
-      console.error("Error retrieving home data:", error);
+      console.error("Error al obtener los datos de la página de inicio:", error);
       res.status(500).json({
         allOK: false,
-        message: "Error retrieving home data",
+        message: "Error al obtener los datos de la página de inicio.",
         data: error.message,
       });
     }
   },
 
+
   getCategories: async (req, res) => {
     try {
-      const categories = await CategoryModel.find({ isActive: true }).sort({ order: 1 });
+
+      const categories = await InventoryModel.distinct("genero", { type: "games" });
+
       res.status(200).json({
         allOK: true,
-        message: "Categories retrieved successfully",
+        message: "Categorías obtenidas exitosamente.",
         data: categories,
       });
     } catch (error) {
-      console.error("Error retrieving categories:", error);
+      console.error("Error al obtener las categorías:", error);
       res.status(500).json({
         allOK: false,
-        message: "Error retrieving categories",
+        message: "Error al obtener las categorías.",
+        data: error.message,
+      });
+    }
+  },
+
+
+  getFeaturedGames: async (req, res) => {
+    try {
+
+      const featuredGames = await InventoryModel.find({ type: "games" }).sort({ createdAt: -1 }).limit(5);
+
+      if (!featuredGames || featuredGames.length === 0) {
+        return res.status(404).json({
+          allOK: false,
+          message: "No se encontraron juegos destacados.",
+          data: null,
+        });
+      }
+
+      res.status(200).json({
+        allOK: true,
+        message: "Juegos destacados obtenidos exitosamente.",
+        data: featuredGames,
+      });
+    } catch (error) {
+      console.error("Error al obtener los juegos destacados:", error);
+      res.status(500).json({
+        allOK: false,
+        message: "Error al obtener los juegos destacados.",
         data: error.message,
       });
     }
@@ -64,151 +74,47 @@ const homeController = {
 
   getFeatures: async (req, res) => {
     try {
-      const features = await FeatureModel.find({ isActive: true }).sort({ order: 1 });
       res.status(200).json({
         allOK: true,
-        message: "Features retrieved successfully",
-        data: features,
+        message: "Funcionalidad de 'features' no implementada. Usa otros endpoints para obtener datos.",
+        data: null,
       });
     } catch (error) {
-      console.error("Error retrieving features:", error);
+      console.error("Error al obtener features:", error);
       res.status(500).json({
         allOK: false,
-        message: "Error retrieving features",
+        message: "Error al obtener features.",
         data: error.message,
       });
     }
   },
 
-  getFeaturedGames: async (req, res) => {
-    try {
-      const limit = parseInt(req.query.limit) || 6;
-      const featuredGames = await GameModel.find().sort({ createdAt: -1 }).limit(limit);
-      res.status(200).json({
-        allOK: true,
-        message: "Featured games retrieved successfully",
-        data: featuredGames,
-      });
-    } catch (error) {
-      console.error("Error retrieving featured games:", error);
-      res.status(500).json({
-        allOK: false,
-        message: "Error retrieving featured games",
-        data: error.message,
-      });
-    }
-  },
 
   createCategory: async (req, res) => {
-    try {
-      const { name, description, icon, route, imageUrl, order } = req.body;
-      
-      if (!name || !description || !icon || !route) {
-        return res.status(400).json({
-          allOK: false,
-          message: "Todos los campos son requeridos: name, description, icon, route",
-          data: null,
-        });
-      }
-
-      const newCategory = new CategoryModel({ 
-        name, 
-        description, 
-        icon, 
-        route, 
-        imageUrl, 
-        order: order || 0 
-      });
-      const categoryCreated = await newCategory.save();
-      
-      res.status(201).json({
-        allOK: true,
-        message: "Category created successfully",
-        data: categoryCreated,
-      });
-    } catch (error) {
-      console.error("Error creating category:", error);
-      res.status(500).json({
-        allOK: false,
-        message: "Error creating category",
-        data: error.message,
-      });
-    }
+    res.status(405).json({
+      allOK: false,
+      message: "Las categorías se crean automáticamente al agregar un producto. No se permite crear una categoría directamente.",
+      data: null,
+    });
   },
+
 
   createFeature: async (req, res) => {
-    try {
-      const { title, description, icon, order } = req.body;
-      
-      if (!title || !description || !icon) {
-        return res.status(400).json({
-          allOK: false,
-          message: "Todos los campos son requeridos: title, description, icon",
-          data: null,
-        });
-      }
-
-      const newFeature = new FeatureModel({ 
-        title, 
-        description, 
-        icon, 
-        order: order || 0 
-      });
-      const featureCreated = await newFeature.save();
-      
-      res.status(201).json({
-        allOK: true,
-        message: "Feature created successfully",
-        data: featureCreated,
-      });
-    } catch (error) {
-      console.error("Error creating feature:", error);
-      res.status(500).json({
-        allOK: false,
-        message: "Error creating feature",
-        data: error.message,
-      });
-    }
+    res.status(405).json({
+      allOK: false,
+      message: "Las features se crean automáticamente al agregar un producto. No se permite crear una feature directamente.",
+      data: null,
+    });
   },
 
+
   updateHero: async (req, res) => {
-    try {
-      const { heroTitle, heroSubtitle, heroButtonText, heroButtonRoute, heroBackgroundImage } = req.body;
-      
-      let homeConfig = await HomeModel.findOne({ isActive: true });
-      
-      if (!homeConfig) {
-        homeConfig = new HomeModel({
-          heroTitle: heroTitle || "Bienvenido a Princegaming",
-          heroSubtitle: heroSubtitle || "Tu tienda de confianza para consolas, juegos y accesorios gaming",
-          heroButtonText: heroButtonText || "Explorar Consolas",
-          heroButtonRoute: heroButtonRoute || "/consolas",
-          heroBackgroundImage
-        });
-      } else {
-        if (heroTitle) homeConfig.heroTitle = heroTitle;
-        if (heroSubtitle) homeConfig.heroSubtitle = heroSubtitle;
-        if (heroButtonText) homeConfig.heroButtonText = heroButtonText;
-        if (heroButtonRoute) homeConfig.heroButtonRoute = heroButtonRoute;
-        if (heroBackgroundImage !== undefined) homeConfig.heroBackgroundImage = heroBackgroundImage;
-      }
-      
-      const updatedConfig = await homeConfig.save();
-      
-      res.status(200).json({
-        allOK: true,
-        message: "Hero configuration updated successfully",
-        data: updatedConfig,
-      });
-    } catch (error) {
-      console.error("Error updating hero configuration:", error);
-      res.status(500).json({
-        allOK: false,
-        message: "Error updating hero configuration",
-        data: error.message,
-      });
-    }
-  }
+    res.status(501).json({
+      allOK: false,
+      message: "El método 'updateHero' no está implementado aún.",
+      data: null,
+    });
+  },
 };
 
-export default homeController; 
+export default homeController;

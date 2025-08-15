@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from "express";
 import connectDB from './config/db.js';
 import morgan from "morgan";
-import gamesRouter from "./routers/games.js";
+import inventoryRouter from "./routers/inventory.js";
 import userRouter from "./routers/user.js";
 import homeRouter from "./routers/home.js";
 import imageRouter from "./routers/image.js";
@@ -21,14 +21,13 @@ const port = process.env.PORT || 4000;
 app.use(cors({
   origin: 'http://localhost:4200',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'], 
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 connectDB()
 
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
-app.use('/images', imageRouter); 
-
+app.use('/images', imageRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: 'El backend está funcionando y CORS está habilitado' });
@@ -36,10 +35,10 @@ app.get("/", (req, res) => {
 
 app.use(morgan("dev"));
 app.use(express.json());
-app.use("/games", gamesRouter);
 app.use("/users", userRouter);
 app.use("/home", homeRouter);
 app.use("/image", imageRouter);
+app.use("/inventory", inventoryRouter);
 app.use("/products", productsRouter);
 
 app.listen(port, '0.0.0.0', () => {

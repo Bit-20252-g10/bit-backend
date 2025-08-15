@@ -3,7 +3,6 @@ import GameModel from '../models/games.js';
 import AccessoryModel from '../models/accessory.js';
 import ConsoleModel from '../models/console.js';
 import gamesController from '../controllers/games.js';
-import accessoryController from '../controllers/accessory.js';
 import consoleController from '../controllers/console.js';
 
 

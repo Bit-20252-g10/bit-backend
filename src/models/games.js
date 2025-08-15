@@ -1,63 +1,46 @@
-import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 
-const gameSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    consola: {
-      type: String,
-      required: true,
-      enum: ['PlayStation', 'Xbox', 'Nintendo']
-    },
-    genero: {
-      type: String,
-      required: true,
-      enum: ['Acción', 'Aventura', 'RPG', 'Estrategia', 'Deportes', 'Carreras', 'Shooter', 'Plataformas', 'Puzzle', 'Otros']
-    },
-    descripcion: {
-      type: String,
-      required: true,
-    },
-    precio: {
-      type: Number,
-      required: true,
-    },
-    imageUrl: {
-      type: String,
-      default: null,
-    },
-    stock: {
-      type: Number,
-      default: 0,
-    },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-    developer: {
-      type: String,
-      default: 'Desconocido'
-    },
-    publisher: {
-      type: String,
-      default: 'Desconocido'
-    },
-    releaseYear: {
-      type: Number,
-    },
-    rating: {
-      type: String,
-      enum: ['E', 'E10+', 'T', 'M', 'AO'],
-      default: 'E'
-    },
-    multiplayer: {
-      type: Boolean,
-      default: false
-    }
+// Definición del esquema para un juego
+const gameSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, "El nombre del juego es requerido"],
+    trim: true,
   },
-  { versionKey: false, timestamps: true }
-);
+  console: {
+    type: String,
+    required: [true, "La consola es requerida"],
+    trim: true,
+  },
+  genre: {
+    type: String,
+    required: [true, "El género es requerido"],
+    trim: true,
+  },
+  developer: {
+    type: String,
+    required: [true, "El desarrollador es requerido"],
+    trim: true,
+  },
+  publisher: {
+    type: String,
+    required: [true, "El editor es requerido"],
+    trim: true,
+  },
+  releaseYear: {
+    type: Number,
+    required: [true, "El año de lanzamiento es requerido"],
+  },
+  rating: {
+    type: Number,
+    min: 0,
+    max: 5,
+  },
+  multiplayer: {
+    type: Boolean,
+    default: false,
+  },
+}, { timestamps: true });
 
-export default model("Game", gameSchema);
+const GameModel = mongoose.model("Game", gameSchema);
+export default GameModel;
