@@ -23,19 +23,27 @@ afterAll(async () => {
 describe("Games Model", () => {
   it("should create a game", async () => {
     // arrange
-const gameData = {
-  name: 'The Legend of Zelda: Breath of the Wild',
-  consola: 'Nintendo', 
-  genero: 'Aventura', 
-  descripcion: 'Un juego épico de mundo abierto.',
-  precio: 59.99,
-};
+    const gameData = {
+      name: 'The Legend of Zelda: Breath of the Wild',
+      console: 'Nintendo Switch',
+      genre: 'Adventure',
+      developer: 'Nintendo EPD',
+      publisher: 'Nintendo',
+      releaseYear: 2017,
+      description: 'An epic open-world adventure game.',
+      price: 59.99,
+    };
+    
     // act
     const mockGame = await gamesModel.create(gameData);
 
     // assert
     expect(mockGame._id).toBeDefined();
-    expect(mockGame.title).toBe(gameData.title);
+    expect(mockGame.name).toBe(gameData.name);
+    expect(mockGame.console).toBe(gameData.console);
     expect(mockGame.genre).toBe(gameData.genre);
+    expect(mockGame.developer).toBe(gameData.developer);
+    expect(mockGame.publisher).toBe(gameData.publisher);
+    expect(mockGame.releaseYear).toBe(gameData.releaseYear);
   });
 });
