@@ -19,7 +19,7 @@ const host = process.env.HOST || 'localhost'
 const port = process.env.PORT || 4000;
 
 app.use(cors({
-  origin: 'http://localhost:4200',
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -41,6 +41,6 @@ app.use("/image", imageRouter);
 app.use("/inventory", inventoryRouter);
 app.use("/products", productsRouter);
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Server is running at http://${host}:${port}`);
+app.listen(4000, '0.0.0.0', () => {
+  console.log('Servidor corriendo en 0.0.0.0:4000');
 });
