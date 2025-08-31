@@ -21,7 +21,7 @@ afterAll(async () => {
 });
 
 describe("Games Model", () => {
-  it("should create a game", async () => {
+  it("Deberia crear un juego", async () => {
     // arrange
     const gameData = {
       name: 'The Legend of Zelda: Breath of the Wild',
@@ -46,4 +46,4 @@ describe("Games Model", () => {
     expect(mockGame.publisher).toBe(gameData.publisher);
     expect(mockGame.releaseYear).toBe(gameData.releaseYear);
   });
-});
+});e
