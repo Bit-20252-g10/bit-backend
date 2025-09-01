@@ -20,16 +20,24 @@ const port = process.env.PORT || 4000;
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
+    // Permitir requests sin origin (curl, apps móviles, etc.)
     if (!origin) return callback(null, true);
-    if (origin.startsWith('http://18.234.152.4:') || origin === 'http://my-frontend-jara.s3-website-us-east-1.amazonaws.com/') {
+
+    const allowedOrigins = [
+      "http://my-frontend-jara.s3-website-us-east-1.amazonaws.com"
+    ];
+
+    if (allowedOrigins.includes(origin)) {
       return callback(null, true);
+    } else {
+      return callback(new Error("Not allowed by CORS"));
     }
-    return callback(new Error('Not allowed by CORS'));
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
+
+app.options("*", cors());
 
 connectDB()
 
