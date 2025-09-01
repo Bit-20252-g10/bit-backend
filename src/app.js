@@ -22,7 +22,7 @@ app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    if (origin.startsWith('http://localhost:') || origin === 'http://my-frontend-jara.s3-website-us-east-1.amazonaws.com') {
+    if (origin.startsWith('http://localhost:') || origin === 'http://my-frontend-jara.s3-website-us-east-1.amazonaws.com/') {
       return callback(null, true);
     }
     return callback(new Error('Not allowed by CORS'));
