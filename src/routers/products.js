@@ -4,6 +4,7 @@ import AccessoryModel from '../models/accessory.js';
 import ConsoleModel from '../models/console.js';
 import gamesController from '../controllers/games.js';
 import consoleController from '../controllers/console.js';
+import accessoryController from '../controllers/accessory.js';
 
 
 const productsRouter = Router();
@@ -59,6 +60,27 @@ productsRouter.get("/consoles", (req, res) => {
 productsRouter.post("/games", (req, res) => gamesController.create(req, res));
 productsRouter.post("/consoles", (req, res) => consoleController.create(req, res));
 productsRouter.post("/accessories", (req, res) => accessoryController.create(req, res));
+
+// POST generic product
+productsRouter.post("/", (req, res) => {
+  const { type } = req.body;
+  if (!type) {
+    return res.status(400).json({ allOK: false, message: "Tipo de producto requerido" });
+  }
+  switch (type.toLowerCase()) {
+    case 'game':
+    case 'games':
+      return gamesController.create(req, res);
+    case 'console':
+    case 'consoles':
+      return consoleController.create(req, res);
+    case 'accessory':
+    case 'accessories':
+      return accessoryController.create(req, res);
+    default:
+      return res.status(400).json({ allOK: false, message: "Tipo de producto inválido" });
+  }
+});
 
 // PUT endpoints for updating
 productsRouter.put("/games/:id", (req, res) => gamesController.update(req, res));
