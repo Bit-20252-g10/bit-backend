@@ -19,7 +19,7 @@ const host = process.env.HOST || 'localhost'
 const port = process.env.PORT || 4000;
 
 app.use(cors({
-  origin: 'http://localhost:4200',
+  origin: ['http://localhost:4200', 'http://my-frontend-jara.s3-website-us-east-1.amazonaws.com'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
